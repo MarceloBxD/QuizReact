@@ -1,46 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Button, Flex, useToast, Input, Text } from "@chakra-ui/react";
 import { useApp } from "../../context/contextApi";
 import bgImgResult from "../../assets/images/bgResult.jpg";
-import { questions } from "../../utils/questions";
+import emailjs from "@emailjs/browser";
 
 export const ShowResult = () => {
   const { correctAnswers } = useApp();
   const [name, setName] = useState("");
-  const [tel, setTel] = useState("");
-  const [rating, setRating] = useState(0);
-  const [dataOverview, setDataOverview] = useState([]);
-  const toast = useToast();
-  const overview = {
-    nome: name,
-    telefone: tel,
-    avaliacao: rating,
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setDataOverview([...dataOverview, overview]);
-    {
-      dataOverview.length > 0
-        ? toast({
-            title: "Avaliação enviada com sucesso!",
-            description: "Obrigado por participar!",
-            status: "success",
-            duration: 2000,
-            isClosable: true,
-          })
-        : toast({
-            title: "Erro ao enviar avaliação!",
-            description: "Por favor, tente novamente!",
-            status: "error",
-            duration: 2000,
-            isClosable: true,
-          });
-    }
-  };
+  const [email, setEmail] = useState("");
+  const [description, setDescription] = useState("");
+  const [rating, setRating] = useState(undefined);
+  const form = useRef();
 
   const resetGame = () => {
     window.location.reload();
+  };
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs
+      .sendForm(
+        "service_32jf0yc",
+        "template_khxhcha",
+        form.current,
+        "WRzY65xBH3hhgKsK5"
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
   };
 
   return (
@@ -66,35 +59,49 @@ export const ShowResult = () => {
       </Text>
       <Flex>
         <form
-          onSubmit={handleSubmit}
+          ref={form}
+          onSubmit={sendEmail}
           style={{ display: "flex", flexDirection: "column", width: "100%" }}
         >
           <Flex flexDir="column" gap="10px">
-            <label htmlFor="nome">Nome Completo</label>
+            <label htmlFor="name">Nome Completo</label>
             <Input
               type="text"
               onChange={(e) => setName(e.target.value)}
+              value={name}
               placeholder="Marcelo Bracet"
-              name="nome"
+              name="name"
               id="nome"
             />
-            <label htmlFor="tel">Número</label>
+            <label htmlFor="email">Email</label>
             <Input
-              onChange={(e) => setTel(e.target.value)}
-              type="tel"
-              name="tel"
-              placeholder="(00)00000-0000"
-              id="tel"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              type="email"
+              name="email"
+              placeholder="user@email.com"
+              id="email"
             />
-            <label htmlFor="avaliacao">Avaliação</label>
+            <label htmlFor="avaliacao">Avaliação:</label>
             <Input
-              min="0"
-              value={rating}
+              variant="flushed"
+              defaultValue="10"
               onChange={(e) => setRating(e.target.value)}
-              max="10"
+              value={rating}
+              name="rating"
               type="range"
-              name="avaliacao"
-              id="avaliacao"
+              max="10"
+              min="0"
+            />
+            <label htmlFor="descricao">Descrição</label>
+            <Input
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              type="text"
+              required
+              placeholder="Conte-me o que achou da avaliação!"
+              name="description"
+              id="description"
             />
             <Button
               transition="all 0.4s ease-in-out"
