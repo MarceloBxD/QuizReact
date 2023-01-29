@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Button, Flex, useToast, Input, Text } from "@chakra-ui/react";
+import { Button, Flex, Toast, Input, Text } from "@chakra-ui/react";
 import { useApp } from "../../context/contextApi";
 import bgImgResult from "../../assets/images/bgResult.jpg";
 import emailjs from "@emailjs/browser";
@@ -28,12 +28,34 @@ export const ShowResult = () => {
       )
       .then(
         (result) => {
-          console.log(result.text);
+          if (result.text === "OK") {
+            Toast({
+              title: "Email enviado com sucesso!",
+              status: "success",
+              duration: 2000,
+              isClosable: true,
+            });
+          }
         },
         (error) => {
           console.log(error.text);
+          if (error.text === "Bad Request") {
+            Toast({
+              title: "Email não enviado!",
+              status: "error",
+              duration: 2000,
+              isClosable: true,
+            });
+          }
         }
       );
+
+    if (name && email && description && rating) {
+      setName("");
+      setEmail("");
+      setDescription("");
+      setRating(undefined);
+    }
   };
 
   return (
