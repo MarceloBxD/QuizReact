@@ -35,10 +35,11 @@ export const Form = () => {
       <Text fontWeight="bold" cursor="default" m="20px auto" fontSize="20px">
         Questão {currentQuestion + 1}
       </Text>
-      <Flex p="10px">
+      <Flex flexDir="column" p="10px">
         <Text fontSize="25px" fontWeight="bold" m="0 auto">
           {questions[currentQuestion].pergunta}
         </Text>
+        <Text m="0 auto">Dica: {questions[currentQuestion].dica}</Text>
       </Flex>
       <Flex gap="10px">
         <Flex w="100%" flexDir="column" gap="20px">
