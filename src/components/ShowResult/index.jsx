@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Button, Flex, Toast, Input, Text } from "@chakra-ui/react";
+import { Button, Flex, useToast, Input, Text } from "@chakra-ui/react";
 import { useApp } from "../../context/contextApi";
 import bgImgResult from "../../assets/images/bgResult.jpg";
 import emailjs from "@emailjs/browser";
@@ -11,6 +11,7 @@ export const ShowResult = () => {
   const [description, setDescription] = useState("");
   const [rating, setRating] = useState(undefined);
   const form = useRef();
+  const toast = useToast();
 
   const resetGame = () => {
     window.location.reload();
@@ -29,7 +30,7 @@ export const ShowResult = () => {
       .then(
         (result) => {
           if (result.text === "OK") {
-            Toast({
+            toast({
               title: "Email enviado com sucesso!",
               status: "success",
               duration: 2000,
@@ -40,7 +41,7 @@ export const ShowResult = () => {
         (error) => {
           console.log(error.text);
           if (error.text === "Bad Request") {
-            Toast({
+            toast({
               title: "Email não enviado!",
               status: "error",
               duration: 2000,
@@ -91,7 +92,7 @@ export const ShowResult = () => {
               type="text"
               onChange={(e) => setName(e.target.value)}
               value={name}
-              placeholder="Marcelo Bracet"
+              placeholder="Nome Completo"
               name="name"
               id="nome"
             />
@@ -126,7 +127,7 @@ export const ShowResult = () => {
               id="description"
             />
             <Button
-              transition="all 0.4s ease-in-out"
+              transition="all 0.2s ease-in-out"
               bgColor="#fff"
               color="#000"
               _hover={{ backgroundColor: "#000", color: "#f00" }}
@@ -151,7 +152,7 @@ export const ShowResult = () => {
           variant="ghost"
           color="#fff"
           _hover={{ bgColor: "#000", color: "#f00" }}
-          transition="all 0.4s ease-in-out"
+          transition="all 0.2s ease-in-out"
           onClick={() => resetGame()}
         >
           Tente Novamente!
@@ -160,7 +161,7 @@ export const ShowResult = () => {
           color="#000"
           bgColor="red"
           variant="ghost"
-          transition="all 0.4s ease-in-out"
+          transition="all 0.2s ease-in-out"
           _hover={{ bgColor: "transparent", color: "#fff" }}
           onClick={() => window.close()}
         >

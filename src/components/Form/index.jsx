@@ -28,8 +28,10 @@ export const Form = () => {
       position="absolute"
       h="550px"
       borderRadius="10px"
+      border="1px solid #fff"
       w="500px"
-      bgColor="#fff"
+      color="#fff"
+      bgColor="#000"
     >
       {showResult && <ShowResult />}
       <Text fontWeight="bold" cursor="default" m="20px auto" fontSize="20px">
@@ -45,9 +47,9 @@ export const Form = () => {
         <Flex w="100%" flexDir="column" gap="20px">
           {questions[currentQuestion].opcoes.map((opcao, index) => (
             <Flex
-              border="2px solid #000"
+              border="2px solid #fff"
               borderRadius="8px"
-              _hover={{ bgColor: "#eee" }}
+              _hover={{ bgColor: "#eee", color: "#000" }}
               m="10px"
               key={index}
               onClick={() => handleAnswer(opcao)}
